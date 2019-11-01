@@ -1,0 +1,14 @@
+.header {
+  height: var(--header-height);
+  background: var(--lighter-dark);
+  color: var(--white);
+}
+
+.editor {
+  height: calc(100vh - var(--header-height));
+  background: var(--dark);
+}
+
+.sidebar {
+  background: var(--light-dark);
+}

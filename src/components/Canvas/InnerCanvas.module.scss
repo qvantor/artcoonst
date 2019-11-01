@@ -1,0 +1,9 @@
+.innerCanvas {
+  position: relative;
+  overflow: hidden;
+  height: 100%;
+
+  * {
+    position: absolute;
+  }
+}
