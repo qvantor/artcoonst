@@ -1,6 +1,6 @@
 import { types, getSnapshot } from 'mobx-state-tree'
 
-import { point, pointType } from '../primitives'
+import { point, pointInType, pointType } from '../primitives'
 
 export const transform = types
   .model('transform', {
@@ -26,8 +26,8 @@ export const transform = types
 
 export default types
   .model('style', {
-    width: types.maybe(types.number),
-    height: types.maybe(types.number),
+    width: types.number,
+    height: types.number,
     transform
   })
   .actions(self => ({
@@ -37,8 +37,8 @@ export default types
     setRotate (rotate: number) {
       self.transform.rotate = rotate
     },
-    setTranslate (translate: pointType) {
-      self.transform.translate = translate
+    setTranslate (translate: pointInType) {
+      self.transform.translate = translate as pointType
     }
   }))
   .views(self => ({

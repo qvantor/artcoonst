@@ -3,7 +3,8 @@ import { element } from '../types/elements'
 
 const selection = types
   .model('selection', {
-    selected: types.array(types.reference(element))
+    selected: types.array(types.reference(element)),
+    selectionPreview: types.array(types.reference(element))
   })
   .actions(self => ({
     selectOne (id: string) {
