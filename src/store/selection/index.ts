@@ -1,4 +1,4 @@
-import { types, cast } from 'mobx-state-tree'
+import { types, cast, getSnapshot } from 'mobx-state-tree'
 import { element, elementType } from '../types/elements'
 
 const selection = types
@@ -20,12 +20,12 @@ const selection = types
       self.preview = cast(ids)
     },
     previewToSelection () {
-      self.selected = self.preview
+      self.selected = cast(getSnapshot(self.preview))
       self.preview = cast([])
     }
   }))
   .views(self => ({
-    getSelected () {
+    getSelected (): elementType[] {
       return self.selected.length > 0 ? self.selected : []
     },
     getPreview (): elementType[] {

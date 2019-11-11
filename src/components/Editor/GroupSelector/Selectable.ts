@@ -49,7 +49,7 @@ class Selectable extends EgComponent {
   private mouseUp = () => {
     document.removeEventListener('mousemove', this.mouseMove)
     document.removeEventListener('mouseup', this.mouseUp)
-    if (!this.moved) return
+    if (!this.moved) return this.trigger('moveEnd', { click: true })
     this.ref.setAttribute('style', 'display:none')
     this.trigger('moveEnd')
   }
