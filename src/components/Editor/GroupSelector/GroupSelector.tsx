@@ -7,7 +7,7 @@ import { CanvasContext } from '@/components/Canvas/Canvas'
 const GroupSelector = () => {
   const ref = React.useRef<HTMLDivElement>(null)
   const { getCanvas } = React.useContext(CanvasContext)
-  const { cleanSelection } = inject(store => store.selection)
+  const { cleanSelection, setPreview } = inject(store => store.selection)
   const getOverlap = inject(store => store.elements.getOverlap)
 
   React.useEffect(() => {
@@ -16,8 +16,10 @@ const GroupSelector = () => {
     const selector = new Selectable(ref.current, canvas)
 
     selector
-      .on('move', ({ x, y, width, height }) => getOverlap({ x, y, width, height }))
-      .on('moveEnd', console.log)
+      .on('move',
+        ({ x, y, width, height }) =>
+          setPreview(getOverlap({ x, y, width, height })))
+      .on('moveEnd', () => setPreview([]))
 
     return selector.destroy
   })

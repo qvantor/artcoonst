@@ -1,4 +1,4 @@
-import { types, getSnapshot } from 'mobx-state-tree'
+import { types } from 'mobx-state-tree'
 
 import { point, pointInType, pointType } from '../primitives'
 
@@ -43,7 +43,7 @@ export default types
   }))
   .views(self => ({
     toReactCss () {
-      return Object.assign({}, getSnapshot(self), { transform: self.transform.toCss() })
+      return Object.assign({}, self, { transform: self.transform.toCss() })
     },
     toCss (keyList?: string[]) {
       const numberFields = ['opacity']
