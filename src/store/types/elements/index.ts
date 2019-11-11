@@ -7,6 +7,8 @@ export const element = types.union(image, text)
 
 export { style }
 
+export type styleType = Instance<typeof style>
+
 export type imageType = Instance<typeof image>
 export type textType = Instance<typeof text>
 export type elementType = imageType | textType

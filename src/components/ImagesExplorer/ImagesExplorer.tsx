@@ -7,7 +7,8 @@ const ImagesExplorer = () => {
   const images = [[], [], []]
   const elements = inject((store) => store.elements)
 
-  const addImage = (src: string) => elements.addElement(eC.createImage({ src }))
+  const addImage = (src: string) =>
+    elements.addElement(eC.createImage({ src }, { width: 150, height: 100 }))
   return (
     <div className={cn(styles.explorer, 'd-flex')}>
       {images.map((item, i) => {
