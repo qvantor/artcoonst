@@ -1,16 +1,20 @@
 import React from 'react'
 import { CanvasContext } from '@/components/Canvas/Canvas'
 import { inject } from '@/store'
-import Moveable, { OnDragStart, OnDrag, OnResize, OnResizeStart, OnRotateStart, OnRotate } from 'react-moveable'
+import Moveable, {
+  OnDragStart, OnDrag, OnDragGroupStart, OnDragGroup,
+  OnResize, OnResizeStart, OnResizeGroupStart, OnResizeGroup,
+  OnRotateStart, OnRotate, OnRotateGroupStart, OnRotateGroup
+} from 'react-moveable'
 
 const Selection = () => {
   const { width, height, getCanvas } = React.useContext(CanvasContext)
   const selected = inject(store => store.selection.getSelected())
   const elements = inject(store => store.elements.getElementsArray())
   const canvas = getCanvas()
-  if (selected.length !== 1 || !canvas) return null
-  const { id, style } = selected[0]
-  const target = document.querySelector(`#${id}`) as HTMLElement
+  if (selected.length === 0 || !canvas) return null
+  const { style } = selected[0]
+  const target = selected.map(item => document.querySelector(`#${item.id}`) as HTMLElement)
 
   const onDragStart = ({ set }: OnDragStart) => {
     set([style.transform.translate.x, style.transform.translate.y, 0])
@@ -34,8 +38,52 @@ const Selection = () => {
     style.setRotate(beforeRotate)
   }
 
+  const onDragGroupStart = ({ events }: OnDragGroupStart) => {
+    events.forEach((ev, i) => {
+      ev.set([selected[i].style.transform.translate.x, selected[i].style.transform.translate.y])
+    })
+  }
+  const onDragGroup = ({ events }: OnDragGroup) => {
+    events.forEach(({ beforeTranslate }, i) => {
+      selected[i].style.setTranslate({ x: beforeTranslate[0], y: beforeTranslate[1] })
+    })
+  }
+
+  const onResizeGroupStart = ({ events }: OnResizeGroupStart) => {
+    events.forEach((ev, i) => {
+      ev.setOrigin(['%', '%'])
+      const { style } = selected[i]
+
+      ev.dragStart && ev.dragStart.set([style.transform.translate.x, style.transform.translate.y])
+    })
+  }
+
+  const onResizeGroup = ({ events }: OnResizeGroup) => {
+    events.forEach(({ width, height, drag: { beforeTranslate } }, i) => {
+      const { style } = selected[i]
+      style.setStyle({ width, height })
+      style.setTranslate({ x: beforeTranslate[0], y: beforeTranslate[1] })
+    })
+  }
+
+  const onRotateGroupStart = ({ events }: OnRotateGroupStart) => {
+    events.forEach(({ set, dragStart }, i) => {
+      const { style } = selected[i]
+      set(style.transform.rotate)
+      dragStart && dragStart.set([style.transform.translate.x, style.transform.translate.y])
+    })
+  }
+
+  const onRotateGroup = ({ events }: OnRotateGroup) => {
+    events.forEach(({ beforeRotate, drag: { beforeTranslate } }, i) => {
+      const { style } = selected[i]
+      style.setRotate(beforeRotate)
+      style.setTranslate({ x: beforeTranslate[0], y: beforeTranslate[1] })
+    })
+  }
+
   const elementsSelected = elements
-    .filter(item => item.id !== id)
+    .filter(item => selected.find(sel => sel.id !== item.id))
     .map((item) => document.querySelector(`#${item.id}`)) as Element[]
 
   return <Moveable
@@ -47,12 +95,18 @@ const Selection = () => {
     draggable={true}
     onDragStart={onDragStart}
     onDrag={onDrag}
+    onDragGroupStart={onDragGroupStart}
+    onDragGroup={onDragGroup}
     resizable={true}
     onResizeStart={onResizeStart}
     onResize={onResize}
+    onResizeGroupStart={onResizeGroupStart}
+    onResizeGroup={onResizeGroup}
     rotatable={true}
     onRotateStart={onRotateStart}
     onRotate={onRotate}
+    onRotateGroupStart={onRotateGroupStart}
+    onRotateGroup={onRotateGroup}
     snappable={true}
     snapCenter={true}
     elementGuidelines={elementsSelected}

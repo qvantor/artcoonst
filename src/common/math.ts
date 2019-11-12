@@ -33,11 +33,9 @@ export function doPolygonsIntersect (a: any, b: any) {
       minB = maxB = undefined
       for (j = 0; j < b.length; j++) {
         projected = normal.x * b[j].x + normal.y * b[j].y
-        // @ts-ignore
         if (minB === undefined || projected < minB) {
           minB = projected
         }
-        // @ts-ignore
         if (maxB === undefined || projected > maxB) {
           maxB = projected
         }
