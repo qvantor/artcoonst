@@ -18,7 +18,7 @@ const GroupSelector = () => {
     selector
       .on('move',
         ({ x, y, width, height }) =>
-          setPreview(getOverlap({ x, y, width, height })))
+          setPreview(getOverlap({ x, y, width, height }).map(item => item.id)))
       .on('moveEnd', (params) => {
         if (params.click) cleanSelection()
         else previewToSelection()
