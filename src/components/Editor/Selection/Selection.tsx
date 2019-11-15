@@ -4,13 +4,21 @@ import { inject } from '@/store'
 import Moveable, {
   OnDragStart, OnDrag, OnDragGroupStart, OnDragGroup,
   OnResize, OnResizeStart, OnResizeGroupStart, OnResizeGroup,
-  OnRotateStart, OnRotate, OnRotateGroupStart, OnRotateGroup
+  OnRotateStart, OnRotate, OnRotateGroupStart, OnRotateGroup,
+  OnClick
 } from 'react-moveable'
 
 const Selection = () => {
   const { width, height, getCanvas } = React.useContext(CanvasContext)
-  const selected = inject(store => store.selection.getSelected())
-  const elements = inject(store => store.elements.getElementsArray())
+  const { elements, params, getElementById, selected, editing, setEditing } = inject(store => ({
+    elements: store.elements.getElements(),
+    params: store.elements.params,
+    getElementById: store.elements.getElementById,
+
+    selected: store.selection.getSelected(),
+    editing: store.selection.getEditing(),
+    setEditing: store.selection.setEditing
+  }))
   const canvas = getCanvas()
   if (selected.length === 0 || !canvas) return null
   const { style } = selected[0]
@@ -82,6 +90,14 @@ const Selection = () => {
     })
   }
 
+  const onClick = (e: OnClick) => {
+    const element = getElementById(e.target.id)
+    if (!element) return // error log here
+    const pm = params.get(element.type)
+    if (!pm) return // error log here
+    if (pm.editable) setEditing(element.id)
+  }
+
   const elementsSelected = elements
     .filter(item => selected.find(sel => sel.id !== item.id))
     .map((item) => document.querySelector(`#${item.id}`)) as Element[]
@@ -91,8 +107,8 @@ const Selection = () => {
     target={target}
     origin={false}
     keepRatio={true}
-    dragArea={true}
-    draggable={true}
+    dragArea={!editing}
+    draggable={!editing}
     onDragStart={onDragStart}
     onDrag={onDrag}
     onDragGroupStart={onDragGroupStart}
@@ -109,6 +125,7 @@ const Selection = () => {
     onRotateGroup={onRotateGroup}
     snappable={true}
     snapCenter={true}
+    onClick={onClick}
     elementGuidelines={elementsSelected}
     verticalGuidelines={[0, width / 2, width]}
     horizontalGuidelines={[0, height / 2, height]} />

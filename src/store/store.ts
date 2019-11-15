@@ -1,7 +1,7 @@
 import makeInspectable from 'mobx-devtools-mst' // only-dev
 import { types } from 'mobx-state-tree'
 
-import elements from './elements'
+import elements, { elementsInital } from './elements'
 import selection from './selection'
 
 const storeModel = types
@@ -11,7 +11,7 @@ const storeModel = types
   })
 
 const store = storeModel.create({
-  elements: {},
+  elements: elementsInital,
   selection: {}
 })
 makeInspectable(store)
