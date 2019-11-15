@@ -5,6 +5,11 @@ const textType = types
   .model('textType', {
     text: types.string
   })
+  .actions(self => ({
+    setText (text: string) {
+      self.text = text
+    }
+  }))
 
 const text = types
   .compose(element, textType)

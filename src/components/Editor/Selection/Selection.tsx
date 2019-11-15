@@ -123,7 +123,7 @@ const Selection = () => {
     onRotate={onRotate}
     onRotateGroupStart={onRotateGroupStart}
     onRotateGroup={onRotateGroup}
-    snappable={true}
+    snappable={!editing}
     snapCenter={true}
     onClick={onClick}
     elementGuidelines={elementsSelected}
