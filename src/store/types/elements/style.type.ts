@@ -28,6 +28,7 @@ export default types
   .model('style', {
     width: types.number,
     height: types.number,
+    fontSize: types.maybe(types.number),
     transform
   })
   .actions(self => ({

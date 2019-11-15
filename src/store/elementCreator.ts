@@ -1,4 +1,4 @@
-import { element, style, styleType, imageType } from './types/elements'
+import { element, style, styleType, imageType, textType } from './types/elements'
 import { point } from './types/primitives'
 import nanoid from 'nanoid'
 import { PartialExcept } from '@/types'
@@ -20,6 +20,17 @@ export const createImage = (
     id: `i${nanoid(7)}`,
     type: 'image',
     name: 'Image',
+    style: createStyle(style)
+  }, params))
+}
+
+export const createText = (
+  params: PartialExcept<textType, 'text'>,
+  style: PartialExcept<styleType, 'width' | 'height'>) => {
+  return element.create(Object.assign({
+    id: `t${nanoid(7)}`,
+    type: 'text',
+    name: 'Text',
     style: createStyle(style)
   }, params))
 }
