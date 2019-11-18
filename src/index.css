@@ -7,3 +7,7 @@
     --greenish-blue: #55efc4;
     --greenish-blue-7: rgba(85, 239, 196, 0.7);
 }
+
+*:focus {
+    outline: none;
+}
