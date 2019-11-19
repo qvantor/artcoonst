@@ -6,7 +6,9 @@ import { textType } from '@/store/types/elements'
 interface TextEditorProps {
   text: string,
   id: string,
-  elements: storeType['elements']
+  elements: storeType['elements'],
+  width: number,
+  editing?: any
 }
 
 class TextEditor extends React.Component<TextEditorProps> {
@@ -18,7 +20,17 @@ class TextEditor extends React.Component<TextEditorProps> {
   }
 
   shouldComponentUpdate (nextProps: Readonly<TextEditorProps>) {
-    return nextProps.text === this.props.text
+    if (nextProps.width !== this.props.width) {
+      const { elements, id } = this.props
+      const htmlElement = this.ref.current
+      if (htmlElement) {
+        const element = elements.getElementById(id) as textType
+        const { height } = htmlElement.getBoundingClientRect()
+        element.style.setStyle({ height })
+      }
+      return false
+    }
+    return nextProps.editing !== this.props.editing
   }
 
   onInput = () => {
@@ -34,12 +46,12 @@ class TextEditor extends React.Component<TextEditorProps> {
   }
 
   render () {
-    const { text } = this.props
+    const { text, id, editing } = this.props
 
     return (
       <div
         onInput={this.onInput}
-        contentEditable
+        contentEditable={editing && editing.id === id}
         dangerouslySetInnerHTML={{ __html: text }}
         ref={this.ref} />
     )

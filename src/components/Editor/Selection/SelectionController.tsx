@@ -8,12 +8,23 @@ import Moveable, {
   OnRotateStart, OnRotate, OnRotateGroupStart, OnRotateGroup,
   OnClick
 } from 'react-moveable'
+import { elementTypes } from '@/store/constants'
 
 interface SelectionControllerProps {
   canvas: HTMLDivElement,
   selected: elementType[]
 }
 
+const defaultMoveable = {
+  snappable: true,
+  keepRatio: true,
+  origin: false,
+  snapCenter: true,
+  dragArea: true,
+  draggable: true,
+  rotatable: true,
+  resizable: true
+}
 const SelectionController = ({ canvas, selected }: SelectionControllerProps) => {
   const ref = React.useRef<Moveable>(null)
   const { width, height } = React.useContext(CanvasContext)
@@ -32,7 +43,7 @@ const SelectionController = ({ canvas, selected }: SelectionControllerProps) => 
   }, [snap])
 
   const elements = getElements()
-  const { style } = selected[0]
+  const { style, type } = selected[0]
   const target = selected.map(item => document.querySelector(`#${item.id}`) as HTMLElement)
 
   const onDragStart = ({ set }: OnDragStart) => {
@@ -113,34 +124,50 @@ const SelectionController = ({ canvas, selected }: SelectionControllerProps) => 
     .filter(item => selected.find(sel => sel.id !== item.id))
     .map((item) => document.querySelector(`#${item.id}`)) as Element[]
 
+  const rules = {
+    [elementTypes.text]: {
+      default: {
+        keepRatio: false,
+        renderDirections: ['nw', 'ne', 'se', 'sw', 'e', 'w'],
+        onResize: ({ width, height, drag: { beforeTranslate } }: OnResize) => {
+          style.setStyle({ width, height })
+          style.setTranslate({ x: beforeTranslate[0], y: style.transform.translate.y })
+        }
+      },
+      editing: {
+        draggable: false,
+        dragArea: false,
+        snappable: false
+      }
+    },
+    [elementTypes.image]: { default: {}, editing: {} }
+  }
+
+  const moveableConfig = selected.length === 1
+    ? Object.assign({}, defaultMoveable, rules[type].default, editing && rules[type].editing)
+    : defaultMoveable
+
   return <Moveable
     ref={ref}
     container={canvas}
     target={target}
-    origin={false}
-    keepRatio={false}
-    dragArea={!editing}
-    draggable={!editing}
     onDragStart={onDragStart}
     onDrag={onDrag}
     onDragGroupStart={onDragGroupStart}
     onDragGroup={onDragGroup}
-    resizable={true}
     onResizeStart={onResizeStart}
     onResize={onResize}
     onResizeGroupStart={onResizeGroupStart}
     onResizeGroup={onResizeGroup}
-    rotatable={true}
     onRotateStart={onRotateStart}
     onRotate={onRotate}
     onRotateGroupStart={onRotateGroupStart}
     onRotateGroup={onRotateGroup}
-    snappable={!editing}
-    snapCenter={true}
     onClick={onClick}
     elementGuidelines={elementsSelected}
     verticalGuidelines={[0, width / 2, width]}
-    horizontalGuidelines={[0, height / 2, height]} />
+    horizontalGuidelines={[0, height / 2, height]}
+    {...moveableConfig} />
 }
 
 export default SelectionController
