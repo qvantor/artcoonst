@@ -1,12 +1,14 @@
 import React from 'react'
+import { useStore } from '@/store'
+import { observer } from 'mobx-react'
 import SelectionController from './SelectionController'
-import { inject } from '@/store'
 import { CanvasContext } from '@/components/Canvas/Canvas'
 
 const Selection = () => {
   const { getCanvas } = React.useContext(CanvasContext)
   const canvas = getCanvas()
-  const selected = inject(store => store.selection.getSelected())
+  const { selection: { selected } } = useStore()
+
   if (selected.length === 0 || !canvas) return null // error log here
 
   return (
@@ -14,4 +16,4 @@ const Selection = () => {
   )
 }
 
-export default Selection
+export default observer(Selection)

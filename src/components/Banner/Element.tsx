@@ -1,9 +1,10 @@
 import * as React from 'react'
+import { useObserver } from 'mobx-react'
+import { useStore } from '@/store'
 import { elementType } from '@/store/types/elements'
 import { elementTypes } from '@/store/constants'
 import image from './Image'
 import text from './Text'
-import { inject } from '@/store'
 
 interface IProps {
   item: elementType
@@ -15,13 +16,12 @@ const elementsComponent: { [key: string]: React.FunctionComponent<any> } = {
 }
 
 const Element = ({ item }: IProps) => {
-  const selectOne = inject((store) => store.selection.selectOne)
-  const style = inject(() => item.style.toReactCss())
-  const snap = inject(() => item.getElementSnap())
+  const { selection: { selectOne } } = useStore()
+  const { style } = useObserver(() => ({ style: item.style.toReactCss(), snap: item.getElementSnap() }))
   const Component = elementsComponent[item.type]
   const onMouseDown = () => selectOne(item.id)
   return (
-    <Component {...snap} style={style} onMouseDown={onMouseDown} />
+    <Component {...item} style={style} onMouseDown={onMouseDown} />
   )
 }
 

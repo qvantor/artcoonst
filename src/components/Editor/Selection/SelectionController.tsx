@@ -1,6 +1,6 @@
 import React from 'react'
 import { CanvasContext } from '@/components/Canvas/Canvas'
-import { inject } from '@/store'
+import { useInject } from '@/store'
 import { elementType } from '@/store/types/elements'
 import Moveable, {
   OnDragStart, OnDrag, OnDragGroupStart, OnDragGroup,
@@ -28,21 +28,20 @@ const defaultMoveable = {
 const SelectionController = ({ canvas, selected }: SelectionControllerProps) => {
   const ref = React.useRef<Moveable>(null)
   const { width, height } = React.useContext(CanvasContext)
-  const { getElements, params, getElementById, editing, setEditing } = inject(store => ({
-    getElements: store.elements.getElements,
+  const { snap, elements, params, getElementById, editing, setEditing } = useInject(store => ({
+    elements: store.elements.items,
     params: store.elements.params,
     getElementById: store.elements.getElementById,
 
-    editing: store.selection.getEditing(),
-    setEditing: store.selection.setEditing
+    editing: store.selection.editing,
+    setEditing: store.selection.setEditing,
+    snap: selected.length === 1 && selected[0].getElementSnap()
   }))
 
-  const snap = inject(() => selected.length === 1 && selected[0].getElementSnap()) //subscribe on element changes
   React.useEffect(() => {
     if (ref.current) ref.current.moveable.updateRect()
   }, [snap])
 
-  const elements = getElements()
   const { style, type } = selected[0]
   const target = selected.map(item => document.querySelector(`#${item.id}`) as HTMLElement)
 
@@ -128,9 +127,9 @@ const SelectionController = ({ canvas, selected }: SelectionControllerProps) => 
     [elementTypes.text]: {
       default: {
         keepRatio: false,
-        renderDirections: ['nw', 'ne', 'se', 'sw', 'e', 'w'],
-        onResize: ({ width, height, drag: { beforeTranslate } }: OnResize) => {
-          style.setStyle({ width, height })
+        renderDirections: ['e', 'w'],
+        onResize: ({ width, drag: { beforeTranslate } }: OnResize) => {
+          style.setStyle({ width })
           style.setTranslate({ x: beforeTranslate[0], y: style.transform.translate.y })
         }
       },

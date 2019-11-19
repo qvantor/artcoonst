@@ -1,10 +1,10 @@
 import React from 'react'
 import cn from 'classnames'
-import { eC, inject } from '@/store/'
+import { eC, useStore } from '@/store/'
 import style from './TextExplorer.module.scss'
 
 const TextExplorer = () => {
-  const elements = inject((store) => store.elements)
+  const { elements: { addElement } } = useStore()
   const texts = [
     {
       text: 'Heading',
@@ -17,7 +17,7 @@ const TextExplorer = () => {
       style: { fontSize: 16, width: 98, height: 39 }
     }]
   const onClick = (item: typeof texts[0]) => () => {
-    elements.addElement(eC.createText({ text: item.text }, item.style))
+    addElement(eC.createText({ text: item.text }, item.style))
   }
   return (
     <div className={cn('mb-4', style.textExplorer)}>
