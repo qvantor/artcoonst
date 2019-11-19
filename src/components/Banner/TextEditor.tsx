@@ -25,8 +25,7 @@ class TextEditor extends React.Component<TextEditorProps> {
       const htmlElement = this.ref.current
       if (htmlElement) {
         const element = elements.getElementById(id) as textType
-        const { height } = htmlElement.getBoundingClientRect()
-        element.style.setStyle({ height })
+        element.style.setStyle({ height: htmlElement.clientHeight })
       }
       return false
     }
@@ -39,8 +38,7 @@ class TextEditor extends React.Component<TextEditorProps> {
     if (htmlElement) {
       const element = elements.getElementById(id) as textType
       if (!element) return // error log here
-      const { height } = htmlElement.getBoundingClientRect()
-      element.style.setStyle({ height })
+      element.style.setStyle({ height: htmlElement.clientHeight })
       element.setText(htmlElement.innerHTML)
     }
   }

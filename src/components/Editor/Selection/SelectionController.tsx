@@ -52,7 +52,8 @@ const SelectionController = ({ canvas, selected }: SelectionControllerProps) => 
     style.setTranslate({ x: beforeTranslate[0], y: beforeTranslate[1] })
   }
 
-  const onResizeStart = ({ dragStart }: OnResizeStart) => {
+  const onResizeStart = ({ dragStart, setOrigin }: OnResizeStart) => {
+    setOrigin(['%', '%'])
     if (dragStart) dragStart.set([style.transform.translate.x, style.transform.translate.y])
   }
   const onResize = ({ width, height, drag: { beforeTranslate } }: OnResize) => {
