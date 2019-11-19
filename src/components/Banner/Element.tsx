@@ -17,10 +17,11 @@ const elementsComponent: { [key: string]: React.FunctionComponent<any> } = {
 const Element = ({ item }: IProps) => {
   const selectOne = inject((store) => store.selection.selectOne)
   const style = inject(() => item.style.toReactCss())
+  const snap = inject(() => item.getElementSnap())
   const Component = elementsComponent[item.type]
   const onMouseDown = () => selectOne(item.id)
   return (
-    <Component {...item} style={style} onMouseDown={onMouseDown} />
+    <Component {...snap} style={style} onMouseDown={onMouseDown} />
   )
 }
 

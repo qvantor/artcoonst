@@ -1,4 +1,4 @@
-import { types } from 'mobx-state-tree'
+import { types, getSnapshot } from 'mobx-state-tree'
 import { elementTypesArray } from '@/store/constants'
 import { point } from '../primitives'
 import style from './style.type'
@@ -11,6 +11,9 @@ export default types
     style
   })
   .views(self => ({
+    getElementSnap () {
+      return getSnapshot(self)
+    },
     getPolygon () {
       const { width, height, transform: { translate, rotate, scale } } = self.style
       const center = { x: (width / 2) + translate.x, y: (height / 2) + translate.y }

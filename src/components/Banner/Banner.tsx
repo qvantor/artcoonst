@@ -3,7 +3,7 @@ import Element from './Element'
 import { inject } from '@/store'
 
 const Banner = () => {
-  const items = inject((store) => store.elements.getElementsArray())
+  const items = inject((store) => store.elements.getElements())
   return (
     <React.Fragment>
       {items.map((item, i) => <Element key={i} item={item} />)}

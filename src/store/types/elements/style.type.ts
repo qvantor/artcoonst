@@ -28,6 +28,7 @@ export default types
   .model('style', {
     width: types.number,
     height: types.number,
+    fontSize: types.maybe(types.number),
     transform
   })
   .actions(self => ({
@@ -48,11 +49,10 @@ export default types
     toCss (keyList?: string[]) {
       const numberFields = ['opacity']
       return Object.keys(self).reduce((sum, key) => {
-        // @ts-ignore
         const value = self[key]
         if (value === undefined) return sum
         if (key === 'transform') {
-          return sum += `transform:${value.toCss()};`
+          return sum += `transform:${self.transform.toCss()};`
         }
         const name = key.replace(/([A-Z])/, (one) => `-${one.toLowerCase()}`)
         const finalValue =
