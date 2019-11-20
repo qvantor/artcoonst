@@ -1,10 +1,9 @@
 import * as React from 'react'
 import Element from './Element'
-import { useStore } from '@/store'
-import { observer } from 'mobx-react'
+import { useInject } from '@/store'
 
 const Banner = () => {
-  const { elements: { items } } = useStore()
+  const items = useInject(store => store.elements.items.slice())
   return (
     <React.Fragment>
       {items.map((item, i) => <Element key={i} item={item} />)}
@@ -12,4 +11,4 @@ const Banner = () => {
   )
 }
 
-export default observer(Banner)
+export default Banner

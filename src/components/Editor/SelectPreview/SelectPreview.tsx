@@ -1,10 +1,9 @@
 import React from 'react'
-import { observer } from 'mobx-react'
 import styles from './SelectPreview.module.scss'
-import { useStore } from '@/store'
+import { useInject } from '@/store'
 
 const SelectPreview = () => {
-  const { selection: { preview } } = useStore()
+  const preview = useInject(store => store.selection.preview.slice())
   return (
     <div className={styles.preview}>
       {preview.map(({ id, style: { width, height, transform } }) => {
@@ -14,4 +13,4 @@ const SelectPreview = () => {
   )
 }
 
-export default observer(SelectPreview)
+export default SelectPreview

@@ -9,6 +9,7 @@ import Moveable, {
   OnClick
 } from 'react-moveable'
 import { elementTypes } from '@/store/constants'
+import { checkRef } from '@/hooks'
 
 interface SelectionControllerProps {
   canvas: HTMLDivElement,
@@ -39,7 +40,7 @@ const SelectionController = ({ canvas, selected }: SelectionControllerProps) => 
   }))
 
   React.useEffect(() => {
-    if (ref.current) ref.current.moveable.updateRect()
+    checkRef(ref, ref => ref.moveable.updateRect())
   }, [snap])
 
   const { style, type } = selected[0]

@@ -2,6 +2,7 @@ import { inject } from 'mobx-react'
 import * as React from 'react'
 import { storeType } from '@/store'
 import { textType } from '@/store/types/elements'
+import { checkRef } from '@/hooks'
 
 interface TextEditorProps {
   text: string,
@@ -21,26 +22,23 @@ class TextEditor extends React.Component<TextEditorProps> {
 
   shouldComponentUpdate (nextProps: Readonly<TextEditorProps>) {
     if (nextProps.width !== this.props.width) {
-      const { elements, id } = this.props
-      const htmlElement = this.ref.current
-      if (htmlElement) {
+      checkRef<HTMLDivElement>(this.ref, (htmlElement) => {
+        const { elements, id } = this.props
         const element = elements.getElementById(id) as textType
         element.style.setStyle({ height: htmlElement.clientHeight })
-      }
+      })
       return false
     }
     return nextProps.editing !== this.props.editing
   }
 
   onInput = () => {
-    const { elements, id } = this.props
-    const htmlElement = this.ref.current
-    if (htmlElement) {
+    checkRef<HTMLDivElement>(this.ref, (htmlElement) => {
+      const { elements, id } = this.props
       const element = elements.getElementById(id) as textType
-      if (!element) return // error log here
       element.style.setStyle({ height: htmlElement.clientHeight })
       element.setText(htmlElement.innerHTML)
-    }
+    })
   }
 
   render () {
