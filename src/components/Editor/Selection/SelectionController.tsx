@@ -120,20 +120,15 @@ const SelectionController = ({ canvas, selected }: SelectionControllerProps) => 
     if (!pm) return // error log here
     if (pm.editable) setEditing(element.id)
   }
-
   const elementsSelected = elements
-    .filter(item => selected.find(sel => sel.id !== item.id))
+    .filter(item => !selected.find(sel => sel.id === item.id))
     .map((item) => document.querySelector(`#${item.id}`)) as Element[]
 
   const rules = {
     [elementTypes.text]: {
       default: {
         keepRatio: false,
-        renderDirections: ['e', 'w'],
-        onResize: ({ width, drag: { beforeTranslate } }: OnResize) => {
-          style.setStyle({ width })
-          style.setTranslate({ x: beforeTranslate[0], y: style.transform.translate.y })
-        }
+        renderDirections: ['e', 'w']
       },
       editing: {
         draggable: false,
