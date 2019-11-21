@@ -29,19 +29,19 @@ const defaultMoveable = {
 const SelectionController = ({ canvas, selected }: SelectionControllerProps) => {
   const ref = React.useRef<Moveable>(null)
   const { width, height } = React.useContext(CanvasContext)
-  const { snap, elements, params, getElementById, editing, setEditing } = useInject(store => ({
+  const { text, elements, params, getElementById, editing, setEditing } = useInject(store => ({
     elements: store.elements.items,
     params: store.elements.params,
     getElementById: store.elements.getElementById,
 
     editing: store.selection.editing,
     setEditing: store.selection.setEditing,
-    snap: selected.length === 1 && selected[0].getElementSnap()
+    // @ts-ignore
+    text: selected.length === 1 && selected[0].text
   }))
-
   React.useEffect(() => {
     checkRef(ref, ref => ref.moveable.updateRect())
-  }, [snap])
+  }, [text])
 
   const { style, type } = selected[0]
   const target = selected.map(item => document.querySelector(`#${item.id}`) as HTMLElement)
@@ -57,8 +57,14 @@ const SelectionController = ({ canvas, selected }: SelectionControllerProps) => 
     setOrigin(['%', '%'])
     if (dragStart) dragStart.set([style.transform.translate.x, style.transform.translate.y])
   }
-  const onResize = ({ width, height, drag: { beforeTranslate } }: OnResize) => {
-    style.setStyle({ width, height })
+  const onResize = ({ width, height, drag: { beforeTranslate }, target }: OnResize) => {
+    const child = target.firstChild as Element | null
+    style.setStyle({
+      width,
+      height: child && child.clientHeight !== height
+        ? child.clientHeight
+        : height
+    })
     style.setTranslate({ x: beforeTranslate[0], y: beforeTranslate[1] })
   }
 

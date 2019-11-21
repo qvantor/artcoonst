@@ -21,14 +21,6 @@ class TextEditor extends React.Component<TextEditorProps> {
   }
 
   shouldComponentUpdate (nextProps: Readonly<TextEditorProps>) {
-    if (nextProps.width !== this.props.width) {
-      checkRef<HTMLDivElement>(this.ref, (htmlElement) => {
-        const { elements, id } = this.props
-        const element = elements.getElementById(id) as textType
-        element.style.setStyle({ height: htmlElement.clientHeight })
-      })
-      return false
-    }
     return nextProps.editing !== this.props.editing
   }
 
