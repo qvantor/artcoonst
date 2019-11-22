@@ -1,6 +1,6 @@
 import store from './store'
-import inject from './inject'
+import { useStore, useInject } from './inject'
 import * as eC from './elementCreator'
 
 export type storeType = typeof store
-export { store, inject, eC }
+export { store, useInject, useStore, eC }

@@ -1,5 +1,5 @@
 import { types, cast, getSnapshot } from 'mobx-state-tree'
-import { element, elementType } from '../types/elements'
+import { element } from '../types/elements'
 
 const selection = types
   .model('selection', {
@@ -32,17 +32,6 @@ const selection = types
     setEditing (id: string) {
       // @ts-ignore
       self.editing = id
-    }
-  }))
-  .views(self => ({
-    getSelected (): elementType[] {
-      return self.selected.length > 0 ? self.selected : []
-    },
-    getPreview (): elementType[] {
-      return self.preview.length > 0 ? self.preview : []
-    },
-    getEditing () {
-      return self.editing
     }
   }))
 

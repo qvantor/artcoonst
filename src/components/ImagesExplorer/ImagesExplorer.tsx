@@ -1,14 +1,14 @@
 import React from 'react'
 import cn from 'classnames'
-import { inject, eC } from '@/store/'
+import { eC, useStore } from '@/store/'
 import styles from './ImagesExplorer.module.scss'
 
 const ImagesExplorer = () => {
   const images = [[], [], []]
-  const elements = inject((store) => store.elements)
+  const { elements: { addElement } } = useStore()
 
   const addImage = (src: string) =>
-    elements.addElement(eC.createImage({ src }, { width: 150, height: 100 }))
+    addElement(eC.createImage({ src }, { width: 150, height: 100 }))
   return (
     <div className={cn(styles.explorer, 'd-flex')}>
       {images.map((item, i) => {

@@ -1,6 +1,6 @@
 import React from 'react'
 import { CanvasContext } from '@/components/Canvas/Canvas'
-import { inject } from '@/store'
+import { useInject } from '@/store'
 import { elementType } from '@/store/types/elements'
 import Moveable, {
   OnDragStart, OnDrag, OnDragGroupStart, OnDragGroup,
@@ -9,6 +9,7 @@ import Moveable, {
   OnClick
 } from 'react-moveable'
 import { elementTypes } from '@/store/constants'
+import { checkRef } from '@/hooks'
 
 interface SelectionControllerProps {
   canvas: HTMLDivElement,
@@ -28,21 +29,20 @@ const defaultMoveable = {
 const SelectionController = ({ canvas, selected }: SelectionControllerProps) => {
   const ref = React.useRef<Moveable>(null)
   const { width, height } = React.useContext(CanvasContext)
-  const { getElements, params, getElementById, editing, setEditing } = inject(store => ({
-    getElements: store.elements.getElements,
+  const { text, elements, params, getElementById, editing, setEditing } = useInject(store => ({
+    elements: store.elements.items,
     params: store.elements.params,
     getElementById: store.elements.getElementById,
 
-    editing: store.selection.getEditing(),
-    setEditing: store.selection.setEditing
+    editing: store.selection.editing,
+    setEditing: store.selection.setEditing,
+    // @ts-ignore
+    text: selected.length === 1 && selected[0].text
   }))
-
-  const snap = inject(() => selected.length === 1 && selected[0].getElementSnap()) //subscribe on element changes
   React.useEffect(() => {
-    if (ref.current) ref.current.moveable.updateRect()
-  }, [snap])
+    checkRef(ref, ref => ref.moveable.updateRect())
+  }, [text])
 
-  const elements = getElements()
   const { style, type } = selected[0]
   const target = selected.map(item => document.querySelector(`#${item.id}`) as HTMLElement)
 
@@ -53,11 +53,18 @@ const SelectionController = ({ canvas, selected }: SelectionControllerProps) => 
     style.setTranslate({ x: beforeTranslate[0], y: beforeTranslate[1] })
   }
 
-  const onResizeStart = ({ dragStart }: OnResizeStart) => {
+  const onResizeStart = ({ dragStart, setOrigin }: OnResizeStart) => {
+    setOrigin(['%', '%'])
     if (dragStart) dragStart.set([style.transform.translate.x, style.transform.translate.y])
   }
-  const onResize = ({ width, height, drag: { beforeTranslate } }: OnResize) => {
-    style.setStyle({ width, height })
+  const onResize = ({ width, height, drag: { beforeTranslate }, target }: OnResize) => {
+    const child = target.firstChild as Element | null
+    style.setStyle({
+      width,
+      height: child && child.clientHeight !== height
+        ? child.clientHeight
+        : height
+    })
     style.setTranslate({ x: beforeTranslate[0], y: beforeTranslate[1] })
   }
 
@@ -119,20 +126,15 @@ const SelectionController = ({ canvas, selected }: SelectionControllerProps) => 
     if (!pm) return // error log here
     if (pm.editable) setEditing(element.id)
   }
-
   const elementsSelected = elements
-    .filter(item => selected.find(sel => sel.id !== item.id))
+    .filter(item => !selected.find(sel => sel.id === item.id))
     .map((item) => document.querySelector(`#${item.id}`)) as Element[]
 
   const rules = {
     [elementTypes.text]: {
       default: {
         keepRatio: false,
-        renderDirections: ['nw', 'ne', 'se', 'sw', 'e', 'w'],
-        onResize: ({ width, height, drag: { beforeTranslate } }: OnResize) => {
-          style.setStyle({ width, height })
-          style.setTranslate({ x: beforeTranslate[0], y: style.transform.translate.y })
-        }
+        renderDirections: ['e', 'w']
       },
       editing: {
         draggable: false,

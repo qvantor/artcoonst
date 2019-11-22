@@ -25,9 +25,6 @@ const elements = types
     getElementById (id: string) {
       return self.items.find(item => item.id === id)
     },
-    getElements (): ReadonlyArray<elementType> {
-      return self.items.length > 0 ? self.items : []
-    },
     getOverlap (selection: { x: number, y: number, width: number, height: number }) {
       const tl = { x: selection.x, y: selection.y }
       const tr = { x: selection.x + selection.width, y: selection.y }

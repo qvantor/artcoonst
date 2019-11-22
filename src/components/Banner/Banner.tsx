@@ -1,9 +1,9 @@
 import * as React from 'react'
 import Element from './Element'
-import { inject } from '@/store'
+import { useInject } from '@/store'
 
 const Banner = () => {
-  const items = inject((store) => store.elements.getElements())
+  const items = useInject(store => store.elements.items.slice())
   return (
     <React.Fragment>
       {items.map((item, i) => <Element key={i} item={item} />)}

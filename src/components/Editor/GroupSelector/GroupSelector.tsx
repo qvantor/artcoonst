@@ -1,14 +1,13 @@
 import React from 'react'
 import styles from './GroupSelector.module.scss'
-import { inject } from '@/store'
+import { useStore } from '@/store'
 import Selectable from './Selectable'
 import { CanvasContext } from '@/components/Canvas/Canvas'
 
 const GroupSelector = () => {
   const ref = React.useRef<HTMLDivElement>(null)
   const { getCanvas } = React.useContext(CanvasContext)
-  const { cleanSelection, setPreview, previewToSelection } = inject(store => store.selection)
-  const getOverlap = inject(store => store.elements.getOverlap)
+  const { selection: { cleanSelection, setPreview, previewToSelection }, elements: { getOverlap } } = useStore()
 
   React.useEffect(() => {
     const canvas = getCanvas()
