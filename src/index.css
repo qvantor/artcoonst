@@ -1,13 +1,20 @@
 :root {
     --header-height: 30px;
+    --toolbar-height: 40px;
 
-    --lighter-dark: #363f4e;
-    --light-dark: #272f39;
-    --dark: #1d2329;
+    --header-bg: gray;
+    --sidebar-bg: #2e3246;
+    --editor-bg: #d5e1e3;
+    --toolbar-color: #fff;
     --greenish-blue: #55efc4;
-    --greenish-blue-7: rgba(85, 239, 196, 0.7);
+    --greenish-blue-3: rgba(85, 239, 196, 0.3);
 }
+
 
 *:focus {
     outline: none;
+}
+
+body {
+    overflow: hidden;
 }
