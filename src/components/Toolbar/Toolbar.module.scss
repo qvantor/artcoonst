@@ -2,6 +2,5 @@
   background: var(--toolbar-color);
   height: var(--toolbar-height);
   line-height: var(--toolbar-height);
-  border-bottom: 1px solid rgba(14, 19, 24, .15);
-  border-top: 1px solid rgba(14, 19, 24, .15);
+  box-shadow: 0 1px 0 0 rgba(14, 19, 24, .15);
 }

@@ -4,7 +4,7 @@ import { Provider } from 'mobx-react'
 import { store } from './store'
 
 import 'bootstrap/dist/css/bootstrap.css'
-import './index.css'
+import './styles/index.scss'
 
 import Layout from './components/Layout/Layout'
 

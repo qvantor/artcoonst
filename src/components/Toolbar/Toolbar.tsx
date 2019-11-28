@@ -14,7 +14,7 @@ const Toolbar = () => {
     Component = elements[selected[0].type] || Component
   }
   return (
-    <div className={styles.toolbar}><Component selected={selected} /></div>
+    <div className={styles.toolbar}><Component selected={selected[0]} /></div>
   )
 }
 

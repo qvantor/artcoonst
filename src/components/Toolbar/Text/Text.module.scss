@@ -1,0 +1,16 @@
+
+.toolbarButton {
+  height: var(--toolbar-height);
+  line-height: var(--toolbar-height);
+  min-width: var(--toolbar-height);
+  border: none;
+  transition: all 300ms;
+
+  &:hover {
+    background: var(--light-grey);
+  }
+
+  &:focus {
+    outline: none;
+  }
+}

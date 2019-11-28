@@ -1,0 +1,25 @@
+@import "iconfont";
+
+:root {
+  --header-height: 30px;
+  --toolbar-height: 40px;
+
+  --header-bg: gray;
+  --sidebar-bg: #2e3246;
+  --editor-bg: #d5e1e3;
+  --toolbar-color: #fff;
+  --greenish-blue: #55efc4;
+  --greenish-blue-3: rgba(85, 239, 196, 0.3);
+
+  --light-grey: rgb(236, 240, 241);
+  --light-grey-7: rgb(236, 240, 241, 0.7);
+}
+
+
+*:focus {
+  outline: none;
+}
+
+body {
+  overflow: hidden;
+}

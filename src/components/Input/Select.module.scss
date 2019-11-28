@@ -1,0 +1,55 @@
+.select {
+  width: 100%;
+  position: relative;
+
+  .caret {
+    font-size: 0.6rem;
+  }
+
+  &.active {
+    background: var(--light-grey);
+
+    .selector {
+      height: auto;
+      overflow-y: scroll;
+      max-height: 50vh;
+    }
+  }
+
+  &:hover {
+    background: var(--light-grey);
+  }
+}
+
+.value {
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.07);
+  padding: 0 10px 0 5px;
+  width: 100%;
+}
+
+.selector {
+  transition: 0.2s max-height;
+  z-index: 10000;
+  position: absolute;
+  left: 0;
+  max-height: 0;
+  overflow: hidden;
+  width: 100%;
+  background: white;
+
+  > div {
+    cursor: pointer;
+    padding: 1px 5px;
+    line-height: 30px;
+
+    &:hover {
+      background: var(--light-grey-7);
+    }
+  }
+
+  .selected {
+    background: var(--light-grey);
+    cursor: default;
+  }
+}

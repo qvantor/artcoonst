@@ -29,19 +29,18 @@ const defaultMoveable = {
 const SelectionController = ({ canvas, selected }: SelectionControllerProps) => {
   const ref = React.useRef<Moveable>(null)
   const { width, height } = React.useContext(CanvasContext)
-  const { text, elements, params, getElementById, editing, setEditing } = useInject(store => ({
+  const { h, elements, params, getElementById, editing, setEditing } = useInject(store => ({
     elements: store.elements.items,
     params: store.elements.params,
     getElementById: store.elements.getElementById,
 
     editing: store.selection.editing,
     setEditing: store.selection.setEditing,
-    // @ts-ignore
-    text: selected.length === 1 && selected[0].text
+    h: selected.length === 1 && selected[0].style.height
   }))
   React.useEffect(() => {
     checkRef(ref, ref => ref.moveable.updateRect())
-  }, [text])
+  }, [h])
 
   const { style, type } = selected[0]
   const target = selected.map(item => document.querySelector(`#${item.id}`) as HTMLElement)
