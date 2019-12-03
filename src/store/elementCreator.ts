@@ -1,3 +1,4 @@
+import { textMiddleware } from './middleware'
 import { element, style, styleType, imageType, textType } from './types/elements'
 import { point } from './types/primitives'
 import nanoid from 'nanoid'
@@ -27,10 +28,12 @@ export const createImage = (
 export const createText = (
   params: PartialExcept<textType, 'text'>,
   style: PartialExcept<styleType, 'width' | 'height'>) => {
-  return element.create(Object.assign({
+  const el = element.create(Object.assign({
     id: `t${nanoid(7)}`,
     type: 'text',
     name: 'Text',
     style: createStyle(style)
   }, params))
+  textMiddleware(el as textType)
+  return el
 }

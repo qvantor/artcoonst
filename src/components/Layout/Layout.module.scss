@@ -1,14 +1,19 @@
 .header {
   height: var(--header-height);
-  background: var(--lighter-dark);
+  background: var(--header-bg);
   color: var(--white);
 }
 
 .editor {
   height: calc(100vh - var(--header-height));
-  background: var(--dark);
+  background: var(--editor-bg);
 }
 
 .sidebar {
-  background: var(--light-dark);
+  background: var(--sidebar-bg);
+}
+
+.canvasContainer {
+  height: calc(100vh - var(--toolbar-height));
+  overflow: scroll;
 }

@@ -1,0 +1,22 @@
+.toolbarButton {
+  height: var(--toolbar-height);
+  line-height: var(--toolbar-height);
+  min-width: var(--toolbar-height);
+  border: none;
+  transition: all 300ms;
+  text-align: center;
+  cursor: pointer;
+
+  &.selected {
+    font-weight: bold;
+    background: var(--light-grey);
+  }
+
+  &:hover {
+    background: var(--light-grey);
+  }
+
+  &:focus {
+    outline: none;
+  }
+}

@@ -28,7 +28,6 @@ class TextEditor extends React.Component<TextEditorProps> {
     checkRef<HTMLDivElement>(this.ref, (htmlElement) => {
       const { elements, id } = this.props
       const element = elements.getElementById(id) as textType
-      element.style.setStyle({ height: htmlElement.clientHeight })
       element.setText(htmlElement.innerHTML)
     })
   }
