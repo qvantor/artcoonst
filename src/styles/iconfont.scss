@@ -36,4 +36,14 @@
   content: "\f100";
 }
 
-$font-Flaticon-down-chevron: "\f100";
+.flaticon-text:before {
+  content: "\f101";
+}
+
+.flaticon-align-center:before {
+  content: "\f102";
+}
+
+.flaticon-align-right:before {
+  content: "\f103";
+}

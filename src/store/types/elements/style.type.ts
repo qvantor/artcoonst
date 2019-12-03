@@ -28,6 +28,7 @@ export default types
   .model('style', {
     width: types.number,
     height: types.number,
+    textAlign: types.maybe(types.enumeration('textAlign', ['left', 'center', 'right'])),
     fontSize: types.maybe(types.number),
     transform
   })
