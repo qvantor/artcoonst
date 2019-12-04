@@ -1,7 +1,7 @@
 import React from 'react'
 import cn from 'classnames'
 import styles from './Layout.module.scss'
-import Canvas from '../Canvas/Canvas'
+import Workspace from '../Workspace/Workspace'
 import Sidebar from '../Sidebar/Sidebar'
 import Toolbar from '../Toolbar/Toolbar'
 
@@ -15,9 +15,7 @@ const Layout = () => {
         </div>
         <div className='col-md-9 p-0'>
           <Toolbar />
-          <div className={cn('d-flex align-items-center justify-content-center', styles.canvasContainer)}>
-            <Canvas width={700} height={300} />
-          </div>
+          <Workspace />
         </div>
       </div>
     </div>
